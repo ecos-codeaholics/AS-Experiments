@@ -20,4 +20,13 @@ public class UserController {
 
         return render("login.ftl", params);
     }
+
+    public static String signup(Request req, Response res) {
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("title", "Sign up");
+
+        return render("signup.ftl", params);
+    }
 }

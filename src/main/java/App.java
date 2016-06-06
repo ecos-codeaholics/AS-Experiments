@@ -12,6 +12,7 @@ public class App {
 
         staticFiles.location("/public");
 
-        get("/user", UserController::login);
+        get("/user/login", UserController::login);
+        get("/user/signup", UserController::signup);
     }
 }
