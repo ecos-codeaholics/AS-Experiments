@@ -13,6 +13,8 @@ import static helpers.ViewsHelper.render;
  */
 public class UserController {
 
+    private static UserModel users = new UserModel();
+
     public static String login(Request req, Response res) {
 
         HashMap<String, Object> params = new HashMap<>();
@@ -40,7 +42,7 @@ public class UserController {
         HashMap<String, Object> params = new HashMap<>();
         params.put("title", "Sign up");
 
-        UserModel.addUser(name, lastName, password, email);
+        users.addUser(name, lastName, password, email);
 
         params.put("msg", "Success");
 
