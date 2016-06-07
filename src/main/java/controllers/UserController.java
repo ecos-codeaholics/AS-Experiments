@@ -1,5 +1,6 @@
 package controllers;
 
+import models.UserModel;
 import spark.Request;
 import spark.Response;
 
@@ -21,12 +22,35 @@ public class UserController {
         return render("login.ftl", params);
     }
 
-    public static String signup(Request req, Response res) {
+    public static String signup(Request req, Response res)  {
 
         HashMap<String, Object> params = new HashMap<>();
-
         params.put("title", "Sign up");
+        params.put("email", "");
+        params.put("password", "");
+        params.put("name", "");
+        params.put("last-name", "");
 
         return render("signup.ftl", params);
     }
+
+    public static String createUser(Request req, Response res) {
+
+        System.out.println(req.pathInfo());
+        String email = req.queryParams("email");
+        String password = req.queryParams("password");
+        String name = req.queryParams("name");
+        String lastName = req.queryParams("last-name");
+
+        System.out.println(req.queryParams());
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("title", "Sign up");
+
+        UserModel.addUser(name, lastName, password, email);
+
+        params.put("msg", "Success");
+
+        return render("signup.ftl", params);
+    };
 }
