@@ -11,8 +11,8 @@ public class App {
 
         staticFiles.location("/public");
 
-        get("/user/login", UserController::login);
-        get("/user/signup", UserController::signup);
-        post("/user/signup", UserController::createUser);
+        get("/login", UserController::login);
+        get("/signup", UserController::signup);
+        post("/signup", UserController::createUser);
     }
 }
