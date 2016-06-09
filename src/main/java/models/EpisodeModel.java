@@ -3,7 +3,8 @@ package models;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
-import config.DatabaseConfig;
+import com.mongodb.client.MongoDatabase;
+import config.DatabaseSingleton;
 import org.bson.Document;
 
 /**
@@ -11,7 +12,7 @@ import org.bson.Document;
  */
 public class EpisodeModel {
 
-    private static DatabaseConfig db = new DatabaseConfig();
+    private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
 
     public boolean addEpisode (String data) {
 
@@ -20,7 +21,7 @@ public class EpisodeModel {
 
         episode.append("data", data);
         try {
-            MongoCollection userCollection = db.mongo().getCollection("user");
+            MongoCollection userCollection = db.getCollection("user");
 
             System.out.println("Guardando en modelo");
             userCollection.insertOne(episode);

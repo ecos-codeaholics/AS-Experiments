@@ -1,4 +1,5 @@
 import controllers.ApiIncidentController;
+import config.DatabaseSingleton;
 import controllers.UserController;
 
 import static helpers.JsonHelper.json;
@@ -11,6 +12,9 @@ public class App {
 
     public static void main (String[] args) {
 
+        // Initialize Database Connection
+        DatabaseSingleton.getInstance();
+
         staticFiles.location("/public");
 
         get("/login", UserController::login);
@@ -20,9 +24,5 @@ public class App {
         // Api rest for movile integration
         post("/api/episode/create", ApiIncidentController::create, json());
 
-        after((req, res) -> {
-
-            res.type("application/json");
-        });
     }
 }
