@@ -20,8 +20,6 @@ package config;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 public class DatabaseSingleton {
 
