@@ -3,7 +3,8 @@ package models;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
-import config.DatabaseConfig;
+import com.mongodb.client.MongoDatabase;
+import config.DatabaseSingleton;
 import org.apache.commons.codec.digest.Crypt;
 import org.bson.Document;
 
@@ -15,8 +16,8 @@ import java.util.Random;
  */
 public class UserModel {
 
-    private static DatabaseConfig db = new DatabaseConfig();
     private Random random = new SecureRandom();
+    private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
 
     public boolean addUser(String name, String lastName, String password, String email) {
 
@@ -32,7 +33,7 @@ public class UserModel {
         user.append("last-name", lastName);
 
         try {
-            MongoCollection userCollection = db.mongo().getCollection("user");
+            MongoCollection userCollection = db.getCollection("user");
 
             System.out.println("Guardando en modelo");
             userCollection.insertOne(user);

@@ -1,3 +1,4 @@
+import config.DatabaseSingleton;
 import controllers.UserController;
 
 import static spark.Spark.*;
@@ -8,6 +9,9 @@ import static spark.Spark.*;
 public class App {
 
     public static void main (String[] args) {
+
+        // Initialize Database Connection
+        DatabaseSingleton.getInstance();
 
         staticFiles.location("/public");
 
