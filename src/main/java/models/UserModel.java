@@ -33,7 +33,7 @@ public class UserModel {
         user.append("last-name", lastName);
 
         try {
-            MongoCollection userCollection = db.getCollection("user");
+            MongoCollection<Document> userCollection = db.getCollection("user");
 
             System.out.println("Guardando en modelo");
             userCollection.insertOne(user);

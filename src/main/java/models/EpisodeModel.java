@@ -5,6 +5,8 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import config.DatabaseSingleton;
+import helpers.JsonEpisodeHelper;
+
 import org.bson.Document;
 
 /**
@@ -12,28 +14,41 @@ import org.bson.Document;
  */
 public class EpisodeModel {
 
-    private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
+	private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
 
-    public boolean addEpisode (String data) {
-
-        System.out.println(data);
+	public boolean addEpisode(JsonEpisodeHelper data) {
+		
+        String date;
+        String time;
+        int intensity;
+        int userId;
+        
         Document episode = new Document();
+		
+        date = data.getFecha();
+        time = data.getHora();
+        intensity = data.getIntensidad();
+        userId = data.getCedula();
+        
+        episode.append("date", date)
+		.append("time", time)
+		.append("intensity", intensity)
+		.append("userId", userId);
 
-        episode.append("data", data);
-        try {
-            MongoCollection userCollection = db.getCollection("user");
+		try {
+			MongoCollection<Document> episodeCollection = db.getCollection("episode");
 
-            System.out.println("Guardando en modelo");
-            userCollection.insertOne(episode);
-            return true;
-        } catch (MongoWriteException e) {
+			System.out.println("Guardando en modelo");
+			episodeCollection.insertOne(episode);
+			return true;
+		} catch (MongoWriteException e) {
 
-            if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
-                System.out.println("Error");
-                return false;
-            }
-            throw e;
+			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
+				System.out.println("Error");
+				return false;
+			}
+			throw e;
 
-        }
-    }
+		}
+	}
 }

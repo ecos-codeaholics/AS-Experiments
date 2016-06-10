@@ -7,53 +7,60 @@ import com.google.gson.annotations.SerializedName;
  */
 public class JsonEpisodeHelper {
 
-    @SerializedName("episodeID")
-    private int id;
-    private int cedula;
-    private String fecha;
-    private String hora;
-    private int nivelDolor;
-    private int intensidad;
+	@SerializedName("episodeID")
+	private int id;
+	private int cedula;
+	private String fecha;
+	private String hora;
+	private int nivelDolor;
+	private int intensidad;
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getCedula() {
-        return cedula;
-    }
+	public int getCedula() {
+		return cedula;
+	}
 
-    public void setCedula(int cedula) {
-        this.cedula = cedula;
-    }
+	public void setCedula(int cedula) {
+		this.cedula = cedula;
+	}
 
-    public String getFecha() {
-        return fecha;
-    }
+	public String getFecha() {
+		return fecha;
+	}
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
 
-    public int getNivelDolor() {
-        return nivelDolor;
-    }
+	public int getNivelDolor() {
+		return nivelDolor;
+	}
 
-    public void setNivelDolor(int nivelDolor) {
-        this.nivelDolor = nivelDolor;
-    }
+	public void setNivelDolor(int nivelDolor) {
+		this.nivelDolor = nivelDolor;
+	}
 
-    public int getIntensidad() {
-        return intensidad;
-    }
+	public int getIntensidad() {
+		return intensidad;
+	}
 
-    public void setIntensidad(int intensidad) {
-        this.intensidad = intensidad;
-    }
+	public void setIntensidad(int intensidad) {
+		this.intensidad = intensidad;
+	}
 
+	public String getHora() {
+		return hora;
+	}
+
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
 
 }
