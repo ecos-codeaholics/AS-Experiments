@@ -4,3 +4,5 @@ target
 .classpath
 .project
 .settings/
+src/main/*.iml
+src/test/*.iml
