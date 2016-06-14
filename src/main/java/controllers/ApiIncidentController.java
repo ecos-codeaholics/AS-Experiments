@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import config.AppConfig;
 import helpers.JsonEpisodeHelper;
 import models.EpisodeModel;
 import spark.Request;
@@ -20,18 +21,22 @@ public class ApiIncidentController {
 
     public static String create (Request req, Response res) {
 
+        if (AppConfig.ENABLE_BUFFER) {
+
+            BufferController bc = new BufferController();
+
+            bc.saveJson(req.body());
+
+            // Should return JSON
+            return "Success";
+        }
         
         try {
 
             JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
 
-
-            
             episodes.addEpisode(data);
-            
 
-            
-            System.out.println("Saving data episode");
         } catch (JsonSyntaxException e) {
             res.status(400);
             return "invalid json format";
