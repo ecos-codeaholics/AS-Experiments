@@ -1,18 +1,26 @@
-import controllers.ApiIncidentController;
-import config.DatabaseSingleton;
-import controllers.UserController;
-
+package codeaholics;
 import static helpers.JsonHelper.json;
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.staticFiles;
+
+import config.DatabaseSingleton;
+import controllers.ApiIncidentController;
+import controllers.UserController;
+import spark.servlet.SparkApplication;
 
 /**
  * Created by snaphuman on 6/6/16.
  */
-public class App {
+public class App implements SparkApplication{
 
     public static void main (String[] args) {
 
-        // Initialize Database Connection
+    }
+    
+    @Override
+    public void init() {
+    	// Initialize Database Connection
         DatabaseSingleton.getInstance();
 
         staticFiles.location("/public");
@@ -23,6 +31,6 @@ public class App {
 
         // Api rest for movile integration
         post("/api/episode/create", ApiIncidentController::create, json());
-
+    	
     }
 }
