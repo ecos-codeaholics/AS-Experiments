@@ -35,7 +35,7 @@ public class UserModel {
         try {
             MongoCollection<Document> userCollection = db.getCollection("user");
 
-            System.out.println("Guardando en modelo");
+            System.out.println("Guardando Usuario");
             userCollection.insertOne(user);
             return true;
         } catch (MongoWriteException e) {

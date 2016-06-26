@@ -3,7 +3,7 @@
 <@layout.masterTemplate>
 
 <h1>${title}</h1>
-<p>Not a user? <a href="/user/signup">Sign up</a></p>
+<p>Not a user? <a href="/signup">Sign up</a></p>
 
 <form class="pure-form pure-form-stacked">
     <fieldset>
