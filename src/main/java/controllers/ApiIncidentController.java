@@ -24,14 +24,8 @@ public class ApiIncidentController {
         try {
 
             JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
-
-
-            
             episodes.addEpisode(data);
-            
 
-            
-            System.out.println("Saving data episode");
         } catch (JsonSyntaxException e) {
             res.status(400);
             return "invalid json format";
@@ -39,5 +33,17 @@ public class ApiIncidentController {
 
         req.body();
         return "success";
+    }
+
+    // TODO: User must have to be authotized, Doctor Role.
+    public static String getById (Request req, Response res) {
+
+        JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
+
+        episodes.getList(data.getCedula());
+
+        System.out.println(req.body());
+
+        return "";
     }
 }

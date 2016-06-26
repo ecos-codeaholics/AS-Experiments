@@ -6,8 +6,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import config.DatabaseSingleton;
 import helpers.JsonEpisodeHelper;
-
 import org.bson.Document;
+
+import static com.mongodb.client.model.Filters.eq;
 
 /**
  * Created by snaphuman on 6/8/16.
@@ -20,25 +21,31 @@ public class EpisodeModel {
 		
         String date;
         String time;
+		String activity;
+		String medicament;
         int intensity;
         int userId;
-        
+
         Document episode = new Document();
 		
         date = data.getFecha();
         time = data.getHora();
-        intensity = data.getIntensidad();
+        intensity = data.getNivelDolor();
         userId = data.getCedula();
-        
-        episode.append("date", date)
-		.append("time", time)
-		.append("intensity", intensity)
-		.append("userId", userId);
+		activity = data.getActividad();
+		medicament = data.getMedicamento();
+
+        episode.append("fecha", date)
+		.append("hora", time)
+		.append("intensidad", intensity)
+		.append("cedula", userId)
+		.append("medicamento", medicament)
+		.append("actividad", activity);
 
 		try {
 			MongoCollection<Document> episodeCollection = db.getCollection("episode");
 
-			System.out.println("Guardando en modelo");
+			System.out.println("Saving data episode");
 			episodeCollection.insertOne(episode);
 			return true;
 		} catch (MongoWriteException e) {

@@ -13,7 +13,24 @@ public class JsonEpisodeHelper {
 	private String fecha;
 	private String hora;
 	private int nivelDolor;
-	private int intensidad;
+	private String medicamento;
+	private String actividad;
+
+	public String getActividad() {
+		return actividad;
+	}
+
+	public void setActividad(String actividad) {
+		this.actividad = actividad;
+	}
+
+	public String getMedicamento() {
+		return medicamento;
+	}
+
+	public void setMedicamento(String medicamento) {
+		this.medicamento = medicamento;
+	}
 
 	public int getId() {
 		return id;
@@ -45,14 +62,6 @@ public class JsonEpisodeHelper {
 
 	public void setNivelDolor(int nivelDolor) {
 		this.nivelDolor = nivelDolor;
-	}
-
-	public int getIntensidad() {
-		return intensidad;
-	}
-
-	public void setIntensidad(int intensidad) {
-		this.intensidad = intensidad;
 	}
 
 	public String getHora() {
