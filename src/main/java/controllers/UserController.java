@@ -6,6 +6,8 @@ import spark.Response;
 
 import java.util.HashMap;
 
+import codeAholics.Authentication;
+
 import static helpers.ViewsHelper.render;
 
 /**
@@ -32,6 +34,25 @@ public class UserController {
         return render("signup.ftl", params);
     }
 
+    public static String doLogin(Request req, Response res) {
+    	System.out.println("iniciando");
+    	String email = req.queryParams("email");
+        String password = req.queryParams("password");
+        System.out.println("espere verificando datos");
+        boolean authenticated = Authentication.autPatients(email, password);
+        if(authenticated){
+        	HashMap<String, Object> params = new HashMap<>();
+            params.put("title", "Sign up");
+        	params.put("msg", "Success");
+            return render("signup.ftl", params);
+        }else{
+        	HashMap<String, Object> params = new HashMap<>();
+            params.put("title", "Login");
+            return render("login.ftl", params);
+        }
+        
+    };
+    
     public static String createUser(Request req, Response res) {
 
         String email = req.queryParams("email");

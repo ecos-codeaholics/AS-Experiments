@@ -19,29 +19,18 @@ public class App {
 
 		//rutas de acceso web
 		get("/login", UserController::login);
+		post("/login", UserController::doLogin);
 		get("/signup", UserController::signup);
 		post("/signup", UserController::createUser);
 
 		// Api rest for movile integration
 		post("/api/episode/create", ApiIncidentController::create, json());
 		
-		
-		//esto es para las funcioanlideades del panciente
-		before("/patient/*",(request, response) -> {
-			boolean authenticated = true;
-			authenticated = Authentication.autPatients("david", "pwd");
-
-			if (!authenticated) {
-				halt(401, "You are not welcome here");
-			}
-		});
-		
 		//esto es para las funcioanlideades del doctor
 		before("/doc/*", (request, response) -> {
-			boolean authenticated = true;
-			authenticated = Authentication.autDocs("david", "pwd");
+			boolean authorized = false;
 
-			if (!authenticated) {
+			if (!authorized) {
 				halt(401, "You are not welcome here");
 			}
 		});
