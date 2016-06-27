@@ -2,11 +2,15 @@ package models;
 
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import config.DatabaseSingleton;
 import helpers.JsonEpisodeHelper;
 import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -53,6 +57,43 @@ public class EpisodeModel {
 			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
 				System.out.println("Error");
 				return false;
+			}
+			throw e;
+
+		}
+	}
+
+	public List<JsonEpisodeHelper> getList (int id) {
+
+		try {
+
+			JsonEpisodeHelper json = new JsonEpisodeHelper();
+			List<JsonEpisodeHelper> dataset = new ArrayList<>();
+
+			MongoCollection<Document> episodeCollection = db.getCollection("episode");
+			FindIterable<Document> episodes = episodeCollection.find(eq("cedula", id));
+
+			for (Document episode: episodes) {
+				System.out.println(episode);
+
+				json.setId(episode.get("_id").toString());
+				json.setActividad(episode.get("actividad").toString());
+				json.setNivelDolor((int) episode.get("intensidad"));
+				json.setCedula((int) episode.get("cedula"));
+				json.setFecha(episode.get("fecha").toString());
+				json.setHora(episode.get("hora").toString());
+				json.setMedicamento(episode.get("medicamento").toString());
+
+				dataset.add(json);
+				System.out.println(json.getMedicamento());
+			}
+
+			return dataset;
+		} catch (MongoWriteException e) {
+
+			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
+				System.out.println("Error");
+				return new ArrayList<>();
 			}
 			throw e;
 

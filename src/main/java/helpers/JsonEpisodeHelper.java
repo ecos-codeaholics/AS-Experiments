@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class JsonEpisodeHelper {
 
-	@SerializedName("episodeID")
-	private int id;
+	@SerializedName("_id")
+	private String _id;
 	private int cedula;
 	private String fecha;
 	private String hora;
@@ -32,13 +32,9 @@ public class JsonEpisodeHelper {
 		this.medicamento = medicamento;
 	}
 
-	public int getId() {
-		return id;
-	}
+	public String getId() { return _id; }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	public void setId(String _id) { this._id = _id; }
 
 	public int getCedula() {
 		return cedula;
@@ -64,9 +60,7 @@ public class JsonEpisodeHelper {
 		this.nivelDolor = nivelDolor;
 	}
 
-	public String getHora() {
-		return hora;
-	}
+	public String getHora() { return hora; }
 
 	public void setHora(String hora) {
 		this.hora = hora;

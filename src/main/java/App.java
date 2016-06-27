@@ -23,6 +23,7 @@ public class App {
 
         // Api rest for movile integration
         post("/api/episode/create", ApiIncidentController::create, json());
+        post("/api/episode/get", ApiIncidentController::getById, json());
 
     }
 }
