@@ -67,14 +67,13 @@ public class EpisodeModel {
 
 		try {
 
-			JsonEpisodeHelper json = new JsonEpisodeHelper();
 			List<JsonEpisodeHelper> dataset = new ArrayList<>();
 
 			MongoCollection<Document> episodeCollection = db.getCollection("episode");
 			FindIterable<Document> episodes = episodeCollection.find(eq("cedula", id));
 
 			for (Document episode: episodes) {
-				System.out.println(episode);
+				JsonEpisodeHelper json = new JsonEpisodeHelper();
 
 				json.setId(episode.get("_id").toString());
 				json.setActividad(episode.get("actividad").toString());
