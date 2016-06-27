@@ -1,3 +1,14 @@
+//	//Se verifica los permisos para el paciente
+//	public static boolean autPatients (String pEmail, String pPwd){
+//		//se consulta en la bd si el paciente existe
+//		boolean authenticated = false;
+//		Document user = new Document();
+//        user.append("email", pEmail);
+//        user.append("password", pPwd);
+//        
+//      Document first = userCollection.find().first();
+//    
+
 package codeAholics;
 
 import java.util.ArrayList;
@@ -23,8 +34,14 @@ public final class Authentication {
 		Document user = new Document();
         user.append("email", pEmail);
         user.append("password", pPwd);
+        
+        Document result = db.getCollection("user").find().first();
+        System.out.println("test"+result);
+                
     	FindIterable<Document> query = db.getCollection("user").find(user);
-    	ArrayList<Document> results = new ArrayList<Document>();
+    	
+        
+        ArrayList<Document> results = new ArrayList<Document>();
         for (Document document : query) {
             results.add(document);
         }
