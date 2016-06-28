@@ -14,6 +14,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import config.DatabaseSingleton;
+import java.util.UUID;
 
 /**
  * Created by davidMtz on 27/6/16.
@@ -50,10 +51,17 @@ public final class Utilities {
 	 * @param pPwd texto a encriptar
 	 * @return mensaje encriptado
 	 */
-	public static String getHash(String pPwd) {
-		
+	public static String[] getHash(String pPwd, String pOldSalt) {
+	  String salt = pOldSalt;
+      
+      if (pOldSalt.equals("")) {
+        salt = getSalt();
+      }
+        String saltedPwd = salt + pPwd;
+        String[] result = new String[2];
+        result[0] = salt;
 		byte[] digest = null;
-		byte[] buffer = pPwd.getBytes();
+		byte[] buffer = saltedPwd.getBytes();
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 			messageDigest.reset();
@@ -62,8 +70,13 @@ public final class Utilities {
 		} catch (NoSuchAlgorithmException ex) {
 			log.error("Error creando Hash");
 		}
-		return toHexadecimal(digest);
-	}
+        result[1] = toHexadecimal(digest);
+		return result;
+    }
+    private static String getSalt () {
+      String salt = String.valueOf(UUID.randomUUID());
+      return salt;
+    }
 	
 	/***
 	 * Adiciona el Documentos en la coleccion especificada.
