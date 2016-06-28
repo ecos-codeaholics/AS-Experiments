@@ -11,17 +11,16 @@
 
 package codeAholics;
 
-import java.util.ArrayList;
-
-import org.bson.Document;
 
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
 import config.DatabaseSingleton;
+import controllers.Encode;
+import org.bson.conversions.Bson;
 
 public final class Authentication {
 	
@@ -35,20 +34,26 @@ public final class Authentication {
         user.append("email", pEmail);
         user.append("password", pPwd);
         
-        Document result = db.getCollection("user").find().first();
-        System.out.println("test"+result);
-                
-    	FindIterable<Document> query = db.getCollection("user").find(user);
-    	
+        Bson filter = new Document("email", pEmail);
+        Document result = (Document) db.getCollection("user").find(filter).first();
         
-        ArrayList<Document> results = new ArrayList<Document>();
-        for (Document document : query) {
-            results.add(document);
+        if (result == null){
+          System.out.println("User Doesn't Exist");
         }
-        if(results.size() > 0){
-        	System.out.println("autenticacion exitosa");
+        else {
+        String resultString = result.get("password").toString();
+        String resultStringS = result.get("salt").toString();    
+        //hacer metodo del hash con estos valores para compararlo con el almacenado enl a base de datos
+        String pass = Encode.encodeGeneratorWithSalt(pPwd, resultStringS);
+          System.out.println(pass+" "+resultString);
+        if (pass.equals(resultString)){
+            System.out.println("autenticacion exitosa");
         	createSesion(pEmail);
         	authenticated = true;
+        }
+        else {
+            System.out.println("Password Incorrecto");
+        }
         }
         return authenticated;
 	}

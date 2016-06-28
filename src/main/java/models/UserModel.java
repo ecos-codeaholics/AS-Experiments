@@ -6,12 +6,8 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import config.DatabaseSingleton;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import controllers.Encode;
+import org.bson.conversions.Bson;
 
 /**
  * Created by snaphuman on 6/6/16.
@@ -21,66 +17,42 @@ public class UserModel {
         private final MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
 
         public boolean addUser(String name, String lastName, String password, String email) {
-        
-        String salt = String.valueOf(UUID.randomUUID());
-        System.out.println(salt);
-        String saltAndPassword = salt+password;
-        System.out.println(saltAndPassword);
- 
-        
-                    /**
-             * Encode Password
-             */
-            
-          try {
-
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(saltAndPassword.getBytes(),0,saltAndPassword.length());
-            System.out.println("MD5: "+new BigInteger(1,md.digest()).toString(16));
-            password = new BigInteger(1,md.digest()).toString(16);
-                        
-            
-          } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
-          }
-          
-                      /**
-             * Encode Password
-             */
-          
-          
-          
-        
-        
+        boolean result = false;
+               
         System.out.println(name+" "+lastName+" "+password+" "+email);
-        
-        
-        
-
+        String pass[] = Encode.encodeGenerator(password);
+                
         Document user = new Document();
         user.append("email", email);
-        user.append("password", password);
-        user.append("salt", salt);
+        user.append("password", pass[1]);
+        user.append("salt", pass[0]);
         user.append("name", name);
         user.append("last-name", lastName);
-
+        
+        Bson filter = new Document("email",email);
+        Document userAlreadyExist = db.getCollection("user").find(filter).first();
+        
+        if (userAlreadyExist==null) {
+        
         try {
+          
             MongoCollection<Document> userCollection = db.getCollection("user");
-
             System.out.println("Guardando Usuario");
             userCollection.insertOne(user);
-            return true;
+            result = true;
         } catch (MongoWriteException e) {
 
             if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
                 System.out.println("Email address already in use: " + email);
-                return false;
+                result = false;
             }
             throw e;
 
         }
+        }
+        else {
+          System.out.println("User Already Exist");
+        }
+        return result;
     }
-        
-        
-    
 }
