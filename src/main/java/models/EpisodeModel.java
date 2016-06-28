@@ -1,5 +1,7 @@
 package models;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
 import com.mongodb.ErrorCategory;
@@ -12,32 +14,29 @@ import helpers.JsonEpisodeHelper;
  * Created by snaphuman on 6/8/16.
  */
 public class EpisodeModel {
+	
+	// Atributos
+	private final static Logger log = LogManager.getLogger(EpisodeModel.class);
 
+	// Metodos
 	public boolean addEpisode(JsonEpisodeHelper data) {
 
-		String date;
-		String time;
-		int intensity;
-		int userId;
-
 		Document episode = new Document();
-
-		date = data.getFecha();
-		time = data.getHora();
-		intensity = data.getIntensidad();
-		userId = data.getCedula();
+		String date = data.getFecha();
+		String time = data.getHora();
+		int intensity = data.getIntensidad();
+		int userId = data.getCedula();
 
 		episode.append("date", date).append("time", time).append("intensity", intensity).append("userId", userId);
-		System.out.println("Guardando en Episodio");
+		log.info("Saving episode...");
 
 		try {
 			Utilities.addRegister(episode, "episode");
-			System.out.println("Proceso Exitoso");
 			return true;
 		} catch (MongoWriteException e) {
 
 			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
-				System.out.println("Error");
+				log.error("Duplicate episode");
 				return false;
 			}
 			throw e;

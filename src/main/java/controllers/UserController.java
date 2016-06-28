@@ -45,7 +45,7 @@ public class UserController {
 	public static String doLogin(Request req, Response res) {
 		String email = req.queryParams("email");
 		String password = req.queryParams("password");
-		System.out.println("Espere verificando datos ususario...");
+		
 		boolean authenticated = Authentication.autPatients(email, password);
 		if (authenticated) {
 			HashMap<String, Object> params = new HashMap<>();

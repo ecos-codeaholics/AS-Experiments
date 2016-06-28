@@ -51,15 +51,14 @@ public final class Utilities {
 	 * @param pPwd texto a encriptar
 	 * @return mensaje encriptado
 	 */
-	public static String[] getHash(String pPwd, String pOldSalt) {
-	  String salt = pOldSalt;
-      
-      if (pOldSalt.equals("")) {
-        salt = getSalt();
-      }
-        String saltedPwd = salt + pPwd;
-        String[] result = new String[2];
-        result[0] = salt;
+	public static String[] getHash(String pPwd, String pSalt) {
+
+		if (pSalt.equals("")) {
+			pSalt = getSalt();
+		}
+		String saltedPwd = pSalt + pPwd;
+		String[] result = new String[2];
+		result[0] = pSalt;
 		byte[] digest = null;
 		byte[] buffer = saltedPwd.getBytes();
 		try {
@@ -68,15 +67,22 @@ public final class Utilities {
 			messageDigest.update(buffer);
 			digest = messageDigest.digest();
 		} catch (NoSuchAlgorithmException ex) {
-			log.error("Error creando Hash");
+			log.error("Error creating hash");
 		}
-        result[1] = toHexadecimal(digest);
+		result[1] = toHexadecimal(digest);
 		return result;
-    }
-    private static String getSalt () {
-      String salt = String.valueOf(UUID.randomUUID());
-      return salt;
-    }
+	}
+	
+	/***
+	 * Genera el salt para poder encriptar.
+	 * 
+	 * @return salt de encriptacion
+	 */
+	private static String getSalt() {
+
+		String salt = String.valueOf(UUID.randomUUID());
+		return salt;
+	}
 	
 	/***
 	 * Adiciona el Documentos en la coleccion especificada.
@@ -86,10 +92,13 @@ public final class Utilities {
 	 */
 	public static void addRegister(Document pRegister, String pCollection) throws MongoWriteException {
 		
+		log.debug("Saving " + pRegister);
+		log.debug("In Collection " + pCollection);
 		MongoCollection<Document> collection = db.getCollection(pCollection);
 		collection.insertOne(pRegister);
-		log.info("Proceso Exitoso");
-			
+		log.info("-----------------------------------");
+		log.info("Successful Process");
+		log.info("-----------------------------------");
 	}
 	
 	/***

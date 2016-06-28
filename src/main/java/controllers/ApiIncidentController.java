@@ -32,10 +32,8 @@ public class ApiIncidentController {
 		try {
 
 			JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
-
 			episodes.addEpisode(data);
-
-			System.out.println("Guardando Episodio");
+			
 		} catch (JsonSyntaxException e) {
 			res.status(400);
 			return "invalid json format";
