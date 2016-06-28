@@ -1,45 +1,38 @@
 package models;
 
+import org.bson.Document;
+
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import config.DatabaseSingleton;
-import helpers.JsonEpisodeHelper;
 
-import org.bson.Document;
+import codeAholics.Utilities;
+import helpers.JsonEpisodeHelper;
 
 /**
  * Created by snaphuman on 6/8/16.
  */
 public class EpisodeModel {
 
-	private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
-
 	public boolean addEpisode(JsonEpisodeHelper data) {
-		
-        String date;
-        String time;
-        int intensity;
-        int userId;
-        
-        Document episode = new Document();
-		
-        date = data.getFecha();
-        time = data.getHora();
-        intensity = data.getIntensidad();
-        userId = data.getCedula();
-        
-        episode.append("date", date)
-		.append("time", time)
-		.append("intensity", intensity)
-		.append("userId", userId);
+
+		String date;
+		String time;
+		int intensity;
+		int userId;
+
+		Document episode = new Document();
+
+		date = data.getFecha();
+		time = data.getHora();
+		intensity = data.getIntensidad();
+		userId = data.getCedula();
+
+		episode.append("date", date).append("time", time).append("intensity", intensity).append("userId", userId);
+		System.out.println("Guardando en Episodio");
 
 		try {
-			MongoCollection<Document> episodeCollection = db.getCollection("episode");
-
-			System.out.println("Guardando en modelo");
-			episodeCollection.insertOne(episode);
+			Utilities.addRegister(episode, "episode");
+			System.out.println("Proceso Exitoso");
 			return true;
 		} catch (MongoWriteException e) {
 

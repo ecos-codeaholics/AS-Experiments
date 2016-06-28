@@ -15,58 +15,87 @@ import static helpers.ViewsHelper.render;
  */
 public class UserController {
 
-    private static UserModel users = new UserModel();
+	// Atributos
+	private static UserModel users = new UserModel();
 
-    public static String login(Request req, Response res) {
+	// Metodos
+	/***
+	 * Carga pagina de login.
+	 * 
+	 * @param req request
+	 * @param res response
+	 * @return estrututa de pagina
+	 */
+	public static String login(Request req, Response res) {
 
-        HashMap<String, Object> params = new HashMap<>();
+		HashMap<String, Object> params = new HashMap<>();
 
-        params.put("title", "Login");
+		params.put("title", "Login");
 
-        return render("login.ftl", params);
-    }
+		return render("login.ftl", params);
+	}
+	
+	/***
+	 * Llama al metodo de autenticacion con lo datos que recupera del formulario.
+	 * 
+	 * @param req request
+	 * @param res response
+	 * @return resultado de la autenticacion
+	 */
+	public static String doLogin(Request req, Response res) {
+		String email = req.queryParams("email");
+		String password = req.queryParams("password");
+		System.out.println("Espere verificando datos ususario...");
+		boolean authenticated = Authentication.autPatients(email, password);
+		if (authenticated) {
+			HashMap<String, Object> params = new HashMap<>();
+			params.put("title", "Sign up");
+			params.put("msg", "Success");
+			return render("signup.ftl", params);
+		} else {
+			HashMap<String, Object> params = new HashMap<>();
+			params.put("title", "Login");
+			return render("login.ftl", params);
+		}
 
-    public static String signup(Request req, Response res) {
+	};
 
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("title", "Sign up");
+	/***
+	 * Carga la pagina de registro de usuarios.
+	 * 
+	 * @param req request
+	 * @param res response
+	 * @return estrututa de pagina
+	 */
+	public static String signup(Request req, Response res) {
 
-        return render("signup.ftl", params);
-    }
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("title", "Sign up");
 
-    public static String doLogin(Request req, Response res) {
-    	System.out.println("iniciando");
-    	String email = req.queryParams("email");
-        String password = req.queryParams("password");
-        System.out.println("espere verificando datos");
-        boolean authenticated = Authentication.autPatients(email, password);
-        if(authenticated){
-        	HashMap<String, Object> params = new HashMap<>();
-            params.put("title", "Sign up");
-        	params.put("msg", "Success");
-            return render("signup.ftl", params);
-        }else{
-        	HashMap<String, Object> params = new HashMap<>();
-            params.put("title", "Login");
-            return render("login.ftl", params);
-        }
-        
-    };
-    
-    public static String createUser(Request req, Response res) {
+		return render("signup.ftl", params);
+	}
 
-        String email = req.queryParams("email");
-        String password = req.queryParams("password");
-        String name = req.queryParams("name");
-        String lastName = req.queryParams("last-name");
+	/***
+	 * Llama al metodos de crear ususarios con los datos recuperados del formulario.
+	 * 
+	 * @param req request
+	 * @param res response
+	 * @return resultado de la autenticacion
+	 */
+	public static String createUser(Request req, Response res) {
 
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("title", "Sign up");
+		String email = req.queryParams("email");
+		String password = req.queryParams("password");
+		String name = req.queryParams("name");
+		String lastName = req.queryParams("last-name");
 
-        users.addUser(name, lastName, password, email);
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("title", "Sign up");
 
-        params.put("msg", "Success");
+		users.addUser(name, lastName, password, email);
 
-        return render("signup.ftl", params);
-    };
+		params.put("msg", "Success");
+
+		return render("signup.ftl", params);
+	};
 }

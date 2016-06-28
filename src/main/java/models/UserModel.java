@@ -1,86 +1,54 @@
 package models;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
+
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import config.DatabaseSingleton;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import codeAholics.Utilities;
 
 /**
  * Created by snaphuman on 6/6/16.
  */
 public class UserModel {
 
-        private final MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
+	//Atributos
+	private final static Logger log = LogManager.getLogger(UserModel.class);
+	
+	// Metodos
+	/***
+	 * Crea el obejto docuemento ususario y lo alamacena el la coleeccion de ususarios.
+	 * 
+	 * @param pName correo del ususario
+	 * @param pLastName contraeeña del ususario
+	 * @param pPassword contraeeña del ususario
+	 * @param pEmail contraeeña del ususario
+	 * @return resultado de la operacion 
+	 */
+	public boolean addUser(String pName, String pLastName, String pPassword, String pEmail)  {
 
-        public boolean addUser(String name, String lastName, String password, String email) {
-        
-        String salt = String.valueOf(UUID.randomUUID());
-        System.out.println(salt);
-        String saltAndPassword = salt+password;
-        System.out.println(saltAndPassword);
- 
-        
-                    /**
-             * Encode Password
-             */
-            
-          try {
+		log.debug("Datos Recibidos : " + pName + " " + pLastName + " " + pPassword + " " + pEmail);
+		String hiddenPwd = Utilities.getHash(pPassword);
+		Document user = new Document();
+		user.append("email", pEmail);
+		user.append("password", hiddenPwd);
+		user.append("name", pName);
+		user.append("last-name", pLastName);
+		log.info("Creando Usuario: " + pName + pLastName);
+		
+		try {
+			Utilities.addRegister(user, "user");
+			return true;
+		} catch (MongoWriteException e) {
 
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(saltAndPassword.getBytes(),0,saltAndPassword.length());
-            System.out.println("MD5: "+new BigInteger(1,md.digest()).toString(16));
-            password = new BigInteger(1,md.digest()).toString(16);
-                        
-            
-          } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
-          }
-          
-                      /**
-             * Encode Password
-             */
-          
-          
-          
-        
-        
-        System.out.println(name+" "+lastName+" "+password+" "+email);
-        
-        
-        
+			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
+				log.error("Email address already in use:  : " + pEmail);
+				return false;
+			}
+			throw e;
+		}
+	}
 
-        Document user = new Document();
-        user.append("email", email);
-        user.append("password", password);
-        user.append("salt", salt);
-        user.append("name", name);
-        user.append("last-name", lastName);
-
-        try {
-            MongoCollection<Document> userCollection = db.getCollection("user");
-
-            System.out.println("Guardando Usuario");
-            userCollection.insertOne(user);
-            return true;
-        } catch (MongoWriteException e) {
-
-            if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
-                System.out.println("Email address already in use: " + email);
-                return false;
-            }
-            throw e;
-
-        }
-    }
-        
-        
-    
 }

@@ -14,30 +14,34 @@ import spark.Response;
  */
 public class ApiIncidentController {
 
-    private static EpisodeModel episodes = new EpisodeModel();
+	// Atributos
+	private static EpisodeModel episodes = new EpisodeModel();
 
-    private static Gson GSON = new GsonBuilder().create();
+	private static Gson GSON = new GsonBuilder().create();
 
-    public static String create (Request req, Response res) {
+	// Metodos
+	/***
+	 * Registra un episodio reportado desde app movil.
+	 * 
+	 * @param req request
+	 * @param res response
+	 * @return mensaje de porceso exitoso
+	 */
+	public static String create(Request req, Response res) {
 
-        
-        try {
+		try {
 
-            JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
+			JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
 
+			episodes.addEpisode(data);
 
-            
-            episodes.addEpisode(data);
-            
+			System.out.println("Guardando Episodio");
+		} catch (JsonSyntaxException e) {
+			res.status(400);
+			return "invalid json format";
+		}
 
-            
-            System.out.println("Saving data episode");
-        } catch (JsonSyntaxException e) {
-            res.status(400);
-            return "invalid json format";
-        }
-
-        req.body();
-        return "success";
-    }
+		req.body();
+		return "success";
+	}
 }

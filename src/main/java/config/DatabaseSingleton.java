@@ -23,15 +23,20 @@ import com.mongodb.client.MongoDatabase;
 
 public class DatabaseSingleton {
 
+	// Atributos
 	private static DatabaseSingleton instance = null;
-	private static MongoClient mongoClient = null;
-	private static MongoDatabase mongoDatabase = null; 
 	
+	private static MongoClient mongoClient = null;
+	
+	private static MongoDatabase mongoDatabase = null;
+
+	// Constructores
 	protected DatabaseSingleton() {
 		mongoClient = new MongoClient(DatabaseConfig.DB_SERVER, DatabaseConfig.DB_SERVER_PORT);
 		mongoDatabase = mongoClient.getDatabase(DatabaseConfig.DB_NAME);
 	}
 
+	// Metodos
 	public static DatabaseSingleton getInstance() {
 		if (instance == null) {
 			instance = new DatabaseSingleton();
@@ -42,5 +47,5 @@ public class DatabaseSingleton {
 	public MongoDatabase getDatabase() {
 		return mongoDatabase;
 	}
-		
+
 }

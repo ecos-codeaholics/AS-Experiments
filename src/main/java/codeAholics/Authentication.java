@@ -1,87 +1,85 @@
-//	//Se verifica los permisos para el paciente
-//	public static boolean autPatients (String pEmail, String pPwd){
-//		//se consulta en la bd si el paciente existe
-//		boolean authenticated = false;
-//		Document user = new Document();
-//        user.append("email", pEmail);
-//        user.append("password", pPwd);
-//        
-//      Document first = userCollection.find().first();
-//    
-
 package codeAholics;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
-import config.DatabaseSingleton;
-
+/**
+ * Created by davidMtz on 26/6/16.
+ */
 public final class Authentication {
+
+	// Atributos
+	private final static Logger log = LogManager.getLogger(Authentication.class);
 	
-	private static MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
-	
-	//Se verifica los permisos para el paciente
-	public static boolean autPatients (String pEmail, String pPwd){
-		//se consulta en la bd si el paciente existe
+	// Metodos
+	/***
+	 * Valida si lo datos corresponden a un paciente registrado.
+	 * 
+	 * @param pEmail correo del ususario
+	 * @param pPwd contraeeña del ususario
+	 * @return resultado de la autenticacion
+	 */
+	public static boolean autPatients(String pEmail, String pPwd) {
+
 		boolean authenticated = false;
+		String hiddenPwd = Utilities.getHash(pPwd);
+
 		Document user = new Document();
-        user.append("email", pEmail);
-        user.append("password", pPwd);
-        
-        Document result = db.getCollection("user").find().first();
-        System.out.println("test"+result);
-                
-    	FindIterable<Document> query = db.getCollection("user").find(user);
-    	
-        
-        ArrayList<Document> results = new ArrayList<Document>();
-        for (Document document : query) {
-            results.add(document);
-        }
-        if(results.size() > 0){
-        	System.out.println("autenticacion exitosa");
-        	createSesion(pEmail);
-        	authenticated = true;
-        }
-        return authenticated;
+		user.append("email", pEmail);
+		user.append("password", hiddenPwd);
+
+		ArrayList<Document> results = Utilities.findRegisters(user, "user");
+		if (results.size() > 0) {
+			log.info("Autenticacion Exitosa para " + pEmail);
+			createSesion(pEmail);
+			authenticated = true;
+		}
+		return authenticated;
 	}
-	
-	// Se verifican permisos para el doctor
-	public static boolean autDocs (String pUser, String pPwd){
+
+	/***
+	 * Valida si lo datos corresponden a un doctor registrado.
+	 * 
+	 * @param pEmail correo del ususario
+	 * @param pPwd contraeeña del ususario
+	 * @return resultado de la autenticacion
+	 */
+	public static boolean autDocs(String pUser, String pPwd) {
 		// se consulta en la bd si el doc exite
 		return true;
 	}
-	
-	private static void createSesion (String pEmail){
+
+	/***
+	 * Crea una sesion para un usuario dado su email.
+	 * 
+	 * @param pEmail correo del ususario al que se le crea la sesion
+	 */
+	private static void createSesion(String pEmail) {
+		
 		Document sesion = new Document();
 		sesion.append("email", pEmail);
+		log.info("Creando Sesion");
 		try {
-            MongoCollection<Document> userCollection = db.getCollection("sesion");
+			Utilities.addRegister(sesion, "sesion");
+			
+		} catch (MongoWriteException e) {
 
-            System.out.println("Creando Sesion");
-            userCollection.insertOne(sesion);
-        } catch (MongoWriteException e) {
-
-            if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
-                System.out.println("Already exist sesion for user: " + pEmail);
-            }
-            throw e;
-
-        }
+			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
+				log.error("Already exist sesion for user: : " + pEmail);
+			}
+			throw e;
+		}
 	}
-	
-	private static void closedSesion(String pEmail){
-		
-		db.getCollection("sesion").deleteMany(new Document("email", pEmail));
-	}
-	
-	
+
+	// private static void closedSesion(String pEmail){
+	// System.out.println("Cerrando Sesion");
+	// db.getCollection("sesion").deleteMany(new Document("email", pEmail));
+	// }
 
 }
