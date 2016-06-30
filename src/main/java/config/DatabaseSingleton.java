@@ -18,22 +18,39 @@ package config;
  * 
  */
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jongo.Jongo;
+
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
 public class DatabaseSingleton {
 
 	// Atributos
-	private static DatabaseSingleton instance = null;
-	
+	private static DatabaseSingleton instance = null;	
 	private static MongoClient mongoClient = null;
-	
 	private static MongoDatabase mongoDatabase = null;
-
+	private static DB dbClient = null;
+	private static Jongo jongoAccess = null;
+	private static DatabaseConfig databaseConfig = null;
+	
+	private final static Logger log = LogManager.getLogger(DatabaseSingleton.class);
+	
 	// Constructores
+	@SuppressWarnings({ "deprecation", "resource" })
 	protected DatabaseSingleton() {
-		mongoClient = new MongoClient(DatabaseConfig.DB_SERVER, DatabaseConfig.DB_SERVER_PORT);
-		mongoDatabase = mongoClient.getDatabase(DatabaseConfig.DB_NAME);
+		
+		databaseConfig = new DatabaseConfig();
+		
+		mongoClient = new MongoClient( databaseConfig.getDbServerUrl(), Integer.parseInt(databaseConfig.getDbPort()) );
+		mongoDatabase = mongoClient.getDatabase(databaseConfig.getDbName());
+		
+		//JONGO
+		dbClient = new MongoClient().getDB(databaseConfig.getDbName());
+		jongoAccess = new Jongo(dbClient);
+		log.info( jongoAccess.toString());
 	}
 
 	// Metodos
@@ -48,4 +65,11 @@ public class DatabaseSingleton {
 		return mongoDatabase;
 	}
 
+	public Jongo getODM() {
+		return jongoAccess;
+	}
+
+	public DatabaseConfig getConfig() {
+		return databaseConfig;
+	}
 }

@@ -1,5 +1,7 @@
 package helpers;
 
+import org.bson.types.ObjectId;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -8,14 +10,14 @@ import com.google.gson.annotations.SerializedName;
 public class JsonEpisodeHelper {
 
 	@SerializedName("episodeID")
-	private int id;
+	private long id;
 	private int cedula;
 	private String fecha;
 	private String hora;
 	private int nivelDolor;
 	private int intensidad;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
