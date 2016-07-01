@@ -3,17 +3,17 @@
 <@layout.masterTemplate>
 
 <h1>${title}</h1>
-<p>Not a user? <a href="/user/signup">Sign up</a></p>
+<p>Not a user? <a href="/signup">Sign up</a></p>
 
-<form class="pure-form pure-form-stacked">
+<form class="pure-form pure-form-stacked" method="post">
     <fieldset>
         <legend>
             Please provide your email and password to access the app
         </legend>
         <label for="email">Email</label>
-        <input id="email" type="email" placeholder="Email">
+        <input id="email" type="email" placeholder="Email" name="email">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Password">
+        <input id="password" type="password" placeholder="Password" name="password">
         <label for="remember" class="pure-checkbox">
             <input id="remember" type="checkbox"> Remember me
         </label>

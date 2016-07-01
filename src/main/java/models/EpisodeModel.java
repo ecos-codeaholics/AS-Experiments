@@ -1,65 +1,54 @@
 package models;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.bson.Document;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import config.DatabaseSingleton;
 import helpers.JsonEpisodeHelper;
-import org.bson.Document;
-
+import codeAholics.Utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.eq;
 
 /**
  * Created by snaphuman on 6/8/16.
  */
 public class EpisodeModel {
 
-	private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
+	// Atributos
+	private final static Logger log = LogManager.getLogger(EpisodeModel.class);
 
+	// Metodos
 	public boolean addEpisode(JsonEpisodeHelper data) {
-		
-        String date;
-        String time;
-		String activity;
-		String medicament;
-        int intensity;
-        int userId;
 
-        Document episode = new Document();
-		
-        date = data.getFecha();
-        time = data.getHora();
-        intensity = data.getNivelDolor();
-        userId = data.getCedula();
-		activity = data.getActividad();
-		medicament = data.getMedicamento();
+		String date = data.getFecha();
+		String time = data.getHora();
+		int intensity = data.getNivelDolor();
+		int userId = data.getCedula();
+		String medicament = data.getMedicamento();
+		String activity = data.getActividad();
 
-        episode.append("fecha", date)
-		.append("hora", time)
-		.append("intensidad", intensity)
-		.append("cedula", userId)
-		.append("medicamento", medicament)
-		.append("actividad", activity);
+		Document episode = new Document();
+
+		episode.append("fecha", date)
+				.append("hora", time)
+				.append("intensidad", intensity)
+				.append("cedula", userId)
+				.append("medicamento", medicament)
+				.append("actividad", activity);
 
 		try {
-			MongoCollection<Document> episodeCollection = db.getCollection("episode");
 
-			System.out.println("Saving data episode");
-			episodeCollection.insertOne(episode);
+			Utilities.addRegister(episode, "episode");
 			return true;
 		} catch (MongoWriteException e) {
 
 			if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
-				System.out.println("Error");
+				log.error("Duplicate episode");
 				return false;
 			}
 			throw e;
-
 		}
 	}
 
@@ -69,8 +58,10 @@ public class EpisodeModel {
 
 			List<JsonEpisodeHelper> dataset = new ArrayList<>();
 
-			MongoCollection<Document> episodeCollection = db.getCollection("episode");
-			FindIterable<Document> episodes = episodeCollection.find(eq("cedula", id));
+			Document cedula = new Document();
+			cedula.append("cedula", id);
+
+			ArrayList<Document> episodes = Utilities.findRegisters(cedula, "episode");
 
 			for (Document episode: episodes) {
 				JsonEpisodeHelper json = new JsonEpisodeHelper();
@@ -84,7 +75,6 @@ public class EpisodeModel {
 				json.setMedicamento(episode.get("medicamento").toString());
 
 				dataset.add(json);
-				System.out.println(json.getMedicamento());
 			}
 
 			return dataset;

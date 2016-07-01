@@ -4,7 +4,7 @@
 
 <h1>${title}</h1>
 
-<p>Already a user? <a href="/user/login">Login</a></p>
+<p>Already a user? <a href="/login">Login</a></p>
 
 <form class="pure-form pure-form-stacked" method="post">
     <fieldset>

@@ -17,30 +17,45 @@ import java.util.List;
  */
 public class ApiIncidentController {
 
-    private static EpisodeModel episodes = new EpisodeModel();
+	// Atributos
+	private static EpisodeModel episodes = new EpisodeModel();
 
-    private static Gson GSON = new GsonBuilder()
-            .serializeNulls()
-            .create();
+	private static Gson GSON = new GsonBuilder()
+			.serializeNulls()
+			.create();
 
-    public static String create (Request req, Response res) {
+	// Metodos
+	/***
+	 * Registra un episodio reportado desde app movil.
+	 * 
+	 * @param req request
+	 * @param res response
+	 * @return mensaje de porceso exitoso
+	 */
+	public static String create(Request req, Response res) {
 
-        
-        try {
+		try {
 
-            JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
-            episodes.addEpisode(data);
+			JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);
+			episodes.addEpisode(data);
+			
+		} catch (JsonSyntaxException e) {
+			res.status(400);
+			return "invalid json format";
+		}
 
-        } catch (JsonSyntaxException e) {
-            res.status(400);
-            return "invalid json format";
-        }
+		req.body();
+		return "success";
+	}
 
-        req.body();
-        return "success";
-    }
-
-    // TODO: User must have to be authotized, Doctor Role.
+    // TODO: User must have to be authorized, Doctor Role.
+	/***
+	 * Obtain episodes from user id.
+	 *
+	 * @param req Request
+	 * @param res Response
+	 * @return Serialized Json object with list of episodes
+	 */
     public static String getById (Request req, Response res) {
 
         JsonEpisodeHelper data = GSON.fromJson(req.body(), JsonEpisodeHelper.class);

@@ -1,51 +1,63 @@
 package models;
 
-import com.mongodb.ErrorCategory;
-import com.mongodb.MongoWriteException;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import config.DatabaseSingleton;
-import org.apache.commons.codec.digest.Crypt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
-import java.security.SecureRandom;
-import java.util.Random;
+import com.mongodb.ErrorCategory;
+import com.mongodb.MongoWriteException;
+import codeAholics.Utilities;
+
+import java.util.ArrayList;
 
 /**
  * Created by snaphuman on 6/6/16.
  */
 public class UserModel {
 
-    private Random random = new SecureRandom();
-    private MongoDatabase db = DatabaseSingleton.getInstance().getDatabase();
+	// Atributos
+	private final static Logger log = LogManager.getLogger(UserModel.class);
 
-    public boolean addUser(String name, String lastName, String password, String email) {
+	// Metodos
+	/**
+	 * * Crea el obejto docuemento ususario y lo alamacena el la coleeccion de
+	 * ususarios.
+	 *
+	 * @param pName correo del ususario
+	 * @param pLastName contraeeña del ususario
+	 * @param pPassword contraeeña del ususario
+	 * @param pEmail contraeeña del ususario
+	 * @return resultado de la operacion
+	 */
+	public boolean addUser(String pName, String pLastName, String pPassword, String pEmail) {
+		boolean result = false;
+		String[] hash = Utilities.getHash(pPassword, "");
+		Document user = new Document();
+		user.append("email", pEmail);
+		user.append("password", hash[1]);
+		user.append("salt", hash[0]);
+		user.append("name", pName);
+		user.append("last-name", pLastName);
+		log.info("Creating user: " + pEmail + "...");
 
-        String salt = "$6$" + Integer.toString(random.nextInt());
-        System.out.println(salt);
-        String secret = Crypt.crypt(password, salt);
-        System.out.println(secret);
+		ArrayList<Document> userAlreadyExist = Utilities.findRegisters(user, "user");
 
-        Document user = new Document();
-        user.append("email", email);
-        user.append("password", secret);
-        user.append("name", name);
-        user.append("last-name", lastName);
+		if (userAlreadyExist.size() > 0) {
+			log.info("User Already Exist");
+		} else {
+			try {
+				Utilities.addRegister(user, "user");
+				result = true;
 
-        try {
-            MongoCollection<Document> userCollection = db.getCollection("user");
+			} catch (MongoWriteException e) {
 
-            System.out.println("Guardando en modelo");
-            userCollection.insertOne(user);
-            return true;
-        } catch (MongoWriteException e) {
-
-            if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
-                System.out.println("Email address already in use: " + email);
-                return false;
-            }
-            throw e;
-
-        }
-    }
+				if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
+					log.error("Duplicate user");
+					result = false;
+				}
+				throw e;
+			}
+		}
+		return result;
+	}
 }
