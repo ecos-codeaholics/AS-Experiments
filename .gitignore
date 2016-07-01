@@ -6,3 +6,4 @@ target
 .settings/
 src/main/*.iml
 src/test/*.iml
+codeaholics.log
