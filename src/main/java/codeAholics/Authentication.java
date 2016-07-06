@@ -24,7 +24,7 @@ public final class Authentication {
 	 * @param pPwd contraeeña del ususario
 	 * @return resultado de la autenticacion
 	 */
-	public static boolean autPatients(String pEmail, String pPwd) {
+	public static boolean doAuthentication(String pEmail, String pPwd, String pUserProfile) {
 		
 		boolean authenticated = false;
 		log.info("Verifying user data...");
@@ -44,7 +44,7 @@ public final class Authentication {
 			ArrayList<Document> results = Utilities.findRegisters(user, "user");
 			if (results.size() > 0) {
 				log.info( pEmail+ " authenticated!");
-				createSesion(pEmail);
+				createSesion(pEmail, "patient");
 				authenticated = true;
 			} else {
 				log.info("Wrong password");
@@ -72,10 +72,11 @@ public final class Authentication {
 	 *
 	 * @param pEmail correo del ususario al que se le crea la sesion
 	 */
-	private static void createSesion(String pEmail) {
+	private static void createSesion(String pEmail, String pUserProfile) {
 
 		Document sesion = new Document();
 		sesion.append("email", pEmail);
+		sesion.append("user-profile", pUserProfile);
 		log.info("Creating Session...");
 		try {
 			Utilities.addRegister(sesion, "sesion");

@@ -45,7 +45,7 @@ public class UserController {
 		String email = req.queryParams("email");
 		String password = req.queryParams("password");
 		
-		boolean authenticated = Authentication.autPatients(email, password);
+		boolean authenticated = Authentication.doAuthentication(email, password, "Doctor");
 		if (authenticated) {
 			HashMap<String, Object> params = new HashMap<>();
 			params.put("title", "Sign up");

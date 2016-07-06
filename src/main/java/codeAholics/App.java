@@ -33,10 +33,11 @@ public class App {
 		// Api rest for mobile integration
 		post("/api/episode/create", ApiIncidentController::create, json());
 		post("/api/episode/get", ApiIncidentController::getById, json());
+		post("/api/episode/login", ApiIncidentController::doLogin, json());
 
 		// verificar permisos a funcionalidades en determinandas rutas
-		before("/doc/*", (request, response) -> {
-			boolean authorized = false;
+		before("/api/episode/*", (request, response) -> {
+			boolean authorized = true;
 
 			if (!authorized) {
 				halt(401, "You are not welcome here");

@@ -1,16 +1,19 @@
 package controllers;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+
+import codeAholics.Authentication;
 import helpers.JsonEpisodeHelper;
+import helpers.LoginHelper;
 import models.EpisodeModel;
 import spark.Request;
 import spark.Response;
-
-import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * Created by snaphuman on 6/7/16.
@@ -68,4 +71,25 @@ public class ApiIncidentController {
 
         return json;
     }
+    
+    public static String doLogin(Request req, Response res) {
+    	
+    	try {
+
+    		LoginHelper data = GSON.fromJson(req.body(), LoginHelper.class);
+    		String result = null;
+    		boolean authenticated = Authentication.doAuthentication(data.getEmail(), data.getPassword(), "Patien");
+    		if (authenticated) {
+    			result = "true";
+    		} else {
+    			result = "false";
+    		}
+    		return result;
+			
+		} catch (JsonSyntaxException e) {
+			res.status(400);
+			return "invalid json format";
+		}
+
+	}
 }
