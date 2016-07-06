@@ -25,6 +25,8 @@ public class App {
 		staticFiles.location("/public");
 
 		// rutas de acceso web
+        /*HTTPS line --- JLRM*/
+        secure("deploy/keystore.jks", "codeaholics", null, null);
 		get("/login", UserController::login);
 		post("/login", UserController::doLogin);
 		get("/signup", UserController::signup);
