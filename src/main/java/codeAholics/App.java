@@ -24,7 +24,7 @@ public class App {
 		DatabaseSingleton.getInstance();
 		staticFiles.location("/public");
         /*HTTPS line --- JLRM*/
-        secure("deploy/keystore.jks", "codeaholics", null, null);
+        //secure("deploy/keystore.jks", "codeaholics", null, null);
         
         
 		// rutas de acceso web
