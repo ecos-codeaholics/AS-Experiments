@@ -23,7 +23,10 @@ public class App {
 		// Initialize Database Connection
 		DatabaseSingleton.getInstance();
 		staticFiles.location("/public");
-
+        /*HTTPS line --- JLRM*/
+        secure("deploy/keystore.jks", "codeaholics", null, null);
+        
+        
 		// rutas de acceso web
 		get("/login", UserController::login);
 		post("/login", UserController::doLogin);
