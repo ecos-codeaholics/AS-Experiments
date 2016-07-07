@@ -78,7 +78,7 @@ public class ApiIncidentController {
 
     		LoginHelper data = GSON.fromJson(req.body(), LoginHelper.class);
     		String result = null;
-    		boolean authenticated = Authentication.doAuthentication(data.getEmail(), data.getPassword(), "Patien");
+    		boolean authenticated = Authentication.doUserAuthentication(data.getEmail(), data.getPassword());
     		if (authenticated) {
     			result = "true";
     		} else {

@@ -45,7 +45,7 @@ public class UserController {
 		String email = req.queryParams("email");
 		String password = req.queryParams("password");
 		
-		boolean authenticated = Authentication.doAuthentication(email, password, "Doctor");
+		boolean authenticated = Authentication.doDocAuthentication(email, password);
 		if (authenticated) {
 			HashMap<String, Object> params = new HashMap<>();
 			params.put("title", "Sign up");
@@ -87,11 +87,12 @@ public class UserController {
 		String password = req.queryParams("password");
 		String name = req.queryParams("name");
 		String lastName = req.queryParams("last-name");
+		String identification = req.queryParams("identification");
 
 		HashMap<String, Object> params = new HashMap<>();
 		params.put("title", "Sign up");
 
-		users.addUser(name, lastName, password, email);
+		users.addUser(name, lastName, password, email, identification);
 
 		params.put("msg", "Success");
 

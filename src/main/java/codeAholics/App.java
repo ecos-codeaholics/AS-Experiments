@@ -1,11 +1,11 @@
 package codeAholics;
 
-import controllers.ApiIncidentController;
-import config.DatabaseSingleton;
-import controllers.UserController;
-
 import static helpers.JsonHelper.json;
 import static spark.Spark.*;
+
+import config.DatabaseSingleton;
+import controllers.ApiIncidentController;
+import controllers.UserController;
 
 /**
  * Created by snaphuman on 6/6/16.
@@ -29,19 +29,27 @@ public class App {
 		post("/login", UserController::doLogin);
 		get("/signup", UserController::signup);
 		post("/signup", UserController::createUser);
-
-		// Api rest for mobile integration
-		post("/api/episode/create", ApiIncidentController::create, json());
-		post("/api/episode/get", ApiIncidentController::getById, json());
-		post("/api/episode/login", ApiIncidentController::doLogin, json());
+		
+		// Rutas Api rest
+		post("/api/login", ApiIncidentController::doLogin, json());
+		
+		//For patient mobile 
+		post("/api/user/create", ApiIncidentController::create, json());
+		
+		//For doctor mobile
+		post("/api/doc/get", ApiIncidentController::getById, json());
 
 		// verificar permisos a funcionalidades en determinandas rutas
-		before("/api/episode/*", (request, response) -> {
-			boolean authorized = true;
+		before("/api/doc/*", Authorization::doDocAuthorization);
+		
+//		before("/api/doc/*", (request, response) -> {
+//		    boolean authenticated = false;
+//		    // ... check if authenticated
+//		    if (!authenticated) {
+//		        halt(401, "You are not welcome here");
+//		    }
+//		});
 
-			if (!authorized) {
-				halt(401, "You are not welcome here");
-			}
-		});
+
 	}
 }

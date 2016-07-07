@@ -15,10 +15,14 @@
         <input id="name" type="text" placeholder="First name" name="name">
         <label for="last-name">Last name</label>
         <input id="last-name" type="text" placeholder="Last name" name="last-name">
+        <label for="identification">Identification</label>
+        <input id="identification" type="text" placeholder="Identification Number" name="identification">
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="Email" name="email">
         <label for="password">Password</label>
         <input id="password" type="password" placeholder="Password" name="password">
+        <label for="rol">Profile</label>
+        <input id="rol" type="radio"  name="rol">
         <label for="remember" class="pure-checkbox">
             <input id="remember" type="checkbox"> I've read the terms and conditions
         </label>

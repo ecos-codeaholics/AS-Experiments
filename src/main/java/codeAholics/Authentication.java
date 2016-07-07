@@ -24,7 +24,7 @@ public final class Authentication {
 	 * @param pPwd contraeeña del ususario
 	 * @return resultado de la autenticacion
 	 */
-	public static boolean doAuthentication(String pEmail, String pPwd, String pUserProfile) {
+	public static boolean doUserAuthentication(String pEmail, String pPwd) {
 		
 		boolean authenticated = false;
 		log.info("Verifying user data...");
@@ -36,20 +36,68 @@ public final class Authentication {
 		if (documents.isEmpty()) {
 			log.info("User Doesn't Exist");
 		} else {
-			String salt = documents.get(0).get("salt").toString();
-			String[] hash = Utilities.getHash(pPwd, salt);
+			user.append("user-profile", "user");
+			ArrayList<Document> documents2 = Utilities.findRegisters(user, "user");
+			if(documents2.isEmpty()){
+				log.info("User Profile Wrong");
+			}else{
+				String salt = documents.get(0).get("salt").toString();
+				String[] hash = Utilities.getHash(pPwd, salt);
 
-			user.append("password", hash[1]);
+				user.append("password", hash[1]);
 
-			ArrayList<Document> results = Utilities.findRegisters(user, "user");
-			if (results.size() > 0) {
-				log.info( pEmail+ " authenticated!");
-				createSesion(pEmail, "patient");
-				authenticated = true;
-			} else {
-				log.info("Wrong password");
+				ArrayList<Document> results = Utilities.findRegisters(user, "user");
+				if (results.size() > 0) {
+					log.info( pEmail+ " authenticated!");
+					createSesion(pEmail, "patient");
+					authenticated = true;
+				} else {
+					log.info("Wrong password");
+				}
 			}
+		}
 
+		return authenticated;
+	}
+	
+	/**
+	 * * Valida si lo datos corresponden a un paciente registrado.
+	 *
+	 * @param pEmail correo del ususario
+	 * @param pPwd contraeeña del ususario
+	 * @return resultado de la autenticacion
+	 */
+	public static boolean doDocAuthentication(String pEmail, String pPwd) {
+		
+		boolean authenticated = false;
+		log.info("Verifying user data...");
+		Document user = new Document();
+		user.append("email", pEmail);
+
+		ArrayList<Document> documents = Utilities.findRegisters(user, "user");
+
+		if (documents.isEmpty()) {
+			log.info("User Doesn't Exist");
+		} else {
+			user.append("user-profile", "doctor");
+			ArrayList<Document> documents2 = Utilities.findRegisters(user, "user");
+			if(documents2.isEmpty()){
+				log.info("User Profile Wrong");
+			}else{
+				String salt = documents.get(0).get("salt").toString();
+				String[] hash = Utilities.getHash(pPwd, salt);
+
+				user.append("password", hash[1]);
+
+				ArrayList<Document> results = Utilities.findRegisters(user, "user");
+				if (results.size() > 0) {
+					log.info( pEmail+ " authenticated!");
+					createSesion(pEmail, "doctor");
+					authenticated = true;
+				} else {
+					log.info("Wrong password");
+				}
+			}
 		}
 
 		return authenticated;
