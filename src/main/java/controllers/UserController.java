@@ -88,11 +88,12 @@ public class UserController {
 		String name = req.queryParams("name");
 		String lastName = req.queryParams("last-name");
 		String identification = req.queryParams("identification");
+		String rol = req.queryParams("rol");
 
 		HashMap<String, Object> params = new HashMap<>();
 		params.put("title", "Sign up");
 
-		users.addUser(name, lastName, password, email, identification);
+		users.addUser(name, lastName, password, email, identification, rol);
 
 		params.put("msg", "Success");
 
