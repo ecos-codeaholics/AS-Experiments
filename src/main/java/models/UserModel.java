@@ -29,14 +29,14 @@ public class UserModel {
 	 * @param pEmail contraeeña del ususario
 	 * @return resultado de la operacion
 	 */
-	public boolean addUser(String pName, String pLastName, String pPassword, String pEmail, String pIdentification) {
+	public boolean addUser(String pName, String pLastName, String pPassword, String pEmail, String pIdentification, String pUserProfile) {
 		boolean result = false;
 		String[] hash = Utilities.getHash(pPassword, "");
 		Document user = new Document();
 		user.append("email", pEmail);
 		user.append("password", hash[1]);
 		user.append("salt", hash[0]);
-		user.append("user-profile", "user");
+		user.append("user-profile", pUserProfile);
 		user.append("name", pName);
 		user.append("last-name", pLastName);
 		user.append("identification", pIdentification);
