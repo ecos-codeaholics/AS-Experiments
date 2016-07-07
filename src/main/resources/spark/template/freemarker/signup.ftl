@@ -21,8 +21,9 @@
         <input id="email" type="email" placeholder="Email" name="email">
         <label for="password">Password</label>
         <input id="password" type="password" placeholder="Password" name="password">
-        <label for="rol">Profile</label>
-        <input id="rol" type="radio"  name="rol">
+        <label>Select your role</label>
+        <input type="radio" value="doctor" name="rol"> Doctor <br>
+        <input type="radio" value="user" name="rol"> User
         <label for="remember" class="pure-checkbox">
             <input id="remember" type="checkbox"> I've read the terms and conditions
         </label>
