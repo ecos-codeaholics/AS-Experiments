@@ -32,8 +32,13 @@ public class DatabaseSingleton {
 
 	// Constructores
 	protected DatabaseSingleton() {
-		mongoClient = new MongoClient(DatabaseConfig.DB_SERVER, DatabaseConfig.DB_SERVER_PORT);
-		mongoDatabase = mongoClient.getDatabase(DatabaseConfig.DB_NAME);
+		String env = DatabaseConfig.DB_ENV;
+		if (env == "replica") {
+			mongoClient = new MongoClient(DatabaseConfig.DB_REPLICA_SET);
+			mongoDatabase = mongoClient.getDatabase(DatabaseConfig.DB_NAME);
+		} else if (env == "local") {
+			mongoClient = new MongoClient(DatabaseConfig.DB_SERVER, DatabaseConfig.DB_SERVER_PORT);
+		}
 	}
 
 	// Metodos
