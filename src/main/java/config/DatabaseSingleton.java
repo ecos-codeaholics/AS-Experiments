@@ -38,6 +38,7 @@ public class DatabaseSingleton {
 			mongoDatabase = mongoClient.getDatabase(DatabaseConfig.DB_NAME);
 		} else if (env == "local") {
 			mongoClient = new MongoClient(DatabaseConfig.DB_SERVER, DatabaseConfig.DB_SERVER_PORT);
+			mongoDatabase = mongoClient.getDatabase(DatabaseConfig.DB_NAME);
 		}
 	}
 

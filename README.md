@@ -17,12 +17,11 @@ All migraine episodes can be consulted by a Doctor, whom also can give back the 
 
 * Clone the repository in your projects directory, cd into it and run:
 
-> mvn compile exec:java -Dexec.mainClass=App
+> mvn compile exec:java -Dexec.mainClass="codeAholics.App"
 
 * Finally go to your browser and enter to the following URI:
 
 > localhost:4567
-
 
 ## Enjoy!
 
