@@ -16,7 +16,7 @@ public class DatabaseConfig {
 	// Database Environment:
 	// Use "local" to localhost mongodb instance
 	// Use "replica" to remote replica set mongodb instances
-	public static final String DB_ENV = "replica";
+	public static final String DB_ENV = "local";
 
 	// Local env attributes
 	public static final String DB_SERVER = "localhost";

@@ -1,11 +1,12 @@
 package codeAholics;
 
-import static helpers.JsonHelper.json;
-import static spark.Spark.*;
-
 import config.DatabaseSingleton;
 import controllers.ApiIncidentController;
+import controllers.IncidentController;
 import controllers.UserController;
+
+import static helpers.JsonHelper.json;
+import static spark.Spark.*;
 
 /**
  * Created by snaphuman on 6/6/16.
@@ -32,7 +33,9 @@ public class App {
 		post("/login", UserController::doLogin);
 		get("/signup", UserController::signup);
 		post("/signup", UserController::createUser);
-		
+		get("/episodes", IncidentController::formEpisodes); // User should be logged in as doctor
+		post("/episodes/id/*/from/*/to/*", IncidentController::findEpisodes); // User should be logged in as doctor
+
 		// Rutas Api rest
 		post("/api/login", ApiIncidentController::doLogin, json());
 		
