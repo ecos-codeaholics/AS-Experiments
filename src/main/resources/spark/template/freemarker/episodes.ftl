@@ -25,8 +25,10 @@
         form = $("#doctor-form");
         cedula = form.find("#cedula").val();
         start = form.find("#start-date").val();
+        hasStart = (start.lenght > 0) ? start : null;
         end = form.find("#end-date").val();
-        url =  "/episodes/id/"+cedula+"/from/"+start+"/to/"+end,
+        hasEnd = (end.lenght > 0) ? end : null;
+        url =  "/episodes/id/"+cedula+"/from/"+hasStart+"/to/"+hasEnd,
         console.log(url)
 
         $.ajax({

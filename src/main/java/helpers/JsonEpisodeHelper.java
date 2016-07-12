@@ -2,6 +2,10 @@ package helpers;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by snaphuman on 6/8/16.
  */
@@ -10,7 +14,7 @@ public class JsonEpisodeHelper {
 	@SerializedName("_id")
 	private String _id;
 	private int cedula;
-	private String fecha;
+	private Date fecha;
 	private String hora;
 	private int nivelDolor;
 	private String medicamento;
@@ -44,11 +48,17 @@ public class JsonEpisodeHelper {
 		this.cedula = cedula;
 	}
 
-	public String getFecha() {
+	public Date getFecha() {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			this.fecha = formatter.parse(String.valueOf(fecha));
+		} catch (ParseException e ) {
+			e.printStackTrace();
+		}
 		return fecha;
 	}
 
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 
