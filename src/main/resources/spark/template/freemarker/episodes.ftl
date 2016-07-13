@@ -12,9 +12,9 @@
         <label for="cedula">Patient id</label>
         <input id="cedula" type="text" placeholder="Patient ID" name="cedula">
         <label for="start-date">Start date</label>
-        <input id="start-date" type="text" placeholder="yyyy-MM-dd" name="start-date">
+        <input id="start-date" type="text" placeholder="yyyy/MM/dd" name="start-date">
         <label for="end-date">End date</label>
-        <input id="end-date" type="text" placeholder="yyyy-MM-dd" name="end-date">
+        <input id="end-date" type="text" placeholder="yyyy/MM/dd" name="end-date">
         <button id="search" type="submit" class="pure-button pure-button-primary">Search</button>
     </fieldset>
 </form>
@@ -33,7 +33,7 @@
 
         $.ajax({
             url: url,
-            type: "POST",
+            type: "GET",
             data: form.serialize(),
             success: function (res) {
                 console.log(res);

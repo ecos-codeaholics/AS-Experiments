@@ -2,13 +2,11 @@ package controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import helpers.JsonEpisodeHelper;
 import models.EpisodeModel;
 import spark.Request;
 import spark.Response;
 
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,7 +48,7 @@ public class IncidentController {
         if (startDate.isEmpty() && endDate.isEmpty()) {
             episodes.getList(cedula);
         } else {
-            System.out.println(new Date());
+            System.out.println("Entra por aca");
 
             try {
                 start = formatter.parse(startDate);
@@ -60,11 +58,21 @@ public class IncidentController {
             }
 
             List<JsonEpisodeHelper> dataset = episodes.getListByDate (cedula, start, end);
-            Type type = new TypeToken<List<JsonEpisodeHelper>>() {}.getType();
 
-            String json = GSON.toJson(dataset, type);
+            HashMap<String, Object> params = new HashMap<>();
 
-            return json;
+            params.put("title", "Results");
+
+            for (JsonEpisodeHelper item : dataset) {
+                params.put(item.NAME_ACTIVIDAD, item.getActividad());
+                params.put(item.NAME_CEDULA, item.getCedula());
+                params.put(item.NAME_FECHA, item.getFecha());
+                params.put(item.NAME_HORA, item.getHora());
+                params.put(item.NAME_INTENSIDAD, item.getNivelDolor());
+                params.put(item.NAME_MEDICAMENTO, item.getMedicamento());
+            }
+
+            return render("episodes-list.ftl", params);
         }
 
 

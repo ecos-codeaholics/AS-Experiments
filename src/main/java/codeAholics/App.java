@@ -34,7 +34,7 @@ public class App {
 		get("/signup", UserController::signup);
 		post("/signup", UserController::createUser);
 		get("/episodes", IncidentController::formEpisodes); // User should be logged in as doctor
-		post("/episodes/id/*/from/*/to/*", IncidentController::findEpisodes); // User should be logged in as doctor
+		get("/episodes/id/*/from/*/to/*", IncidentController::findEpisodes); // User should be logged in as doctor
 
 		// Rutas Api rest
 		post("/api/login", ApiIncidentController::doLogin, json());

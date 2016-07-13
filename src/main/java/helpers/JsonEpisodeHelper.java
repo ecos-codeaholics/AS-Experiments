@@ -20,9 +20,14 @@ public class JsonEpisodeHelper {
 	private String medicamento;
 	private String actividad;
 
-	public String getActividad() {
-		return actividad;
-	}
+	public static final String NAME_CEDULA = "cedula";
+	public static final String NAME_FECHA = "fecha";
+	public static final String NAME_HORA = "hora";
+	public static final String NAME_INTENSIDAD = "intensidad";
+	public static final String NAME_MEDICAMENTO = "medicamento";
+	public static final String NAME_ACTIVIDAD = "actividad";
+
+	public String getActividad() { return actividad; }
 
 	public void setActividad(String actividad) {
 		this.actividad = actividad;
@@ -49,7 +54,11 @@ public class JsonEpisodeHelper {
 	}
 
 	public Date getFecha() {
+
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+		formatter.applyPattern(String.valueOf(fecha));
+		System.out.println(fecha);
 		try {
 			this.fecha = formatter.parse(String.valueOf(fecha));
 		} catch (ParseException e ) {
