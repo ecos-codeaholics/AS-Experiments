@@ -1,6 +1,7 @@
 package controllers;
 
 import codeAholics.Authentication;
+import codeAholics.IAuthenticationSvc;
 import models.UserModel;
 import spark.Request;
 import spark.Response;
@@ -45,7 +46,10 @@ public class UserController {
 		String email = req.queryParams("email");
 		String password = req.queryParams("password");
 		
-		boolean authenticated = Authentication.doDocAuthentication(email, password);
+		IAuthenticationSvc authenticate = new Authentication();
+		
+		boolean authenticated = authenticate.doAuthentication(email, password);
+		
 		if (authenticated) {
 			HashMap<String, Object> params = new HashMap<>();
 			params.put("title", "Sign up");

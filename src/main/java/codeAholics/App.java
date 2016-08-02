@@ -36,8 +36,8 @@ public class App {
 		get("/episodes", IncidentController::formEpisodes); // User should be logged in as doctor
 		get("/episodes/id/*/from/*/to/*", IncidentController::findEpisodes); // User should be logged in as doctor
 
-		// Rutas Api rest
-		post("/api/login", ApiIncidentController::doLogin, json());
+		// Rutas Api rest -- duplicated Login ?
+		//post("/api/login", ApiIncidentController::doLogin, json());
 		
 		//For patient mobile 
 		post("/api/user/create", ApiIncidentController::create, json());

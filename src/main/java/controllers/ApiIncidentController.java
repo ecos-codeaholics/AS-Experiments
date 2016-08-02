@@ -71,7 +71,8 @@ public class ApiIncidentController {
 
         return json;
     }
-    
+   
+    /* duplicated functionality - there is arleady a login
     public static String doLogin(Request req, Response res) {
     	
     	try {
@@ -90,6 +91,6 @@ public class ApiIncidentController {
 			res.status(400);
 			return "invalid json format";
 		}
-
 	}
+	*/
 }
