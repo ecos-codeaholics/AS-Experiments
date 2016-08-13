@@ -19,6 +19,19 @@ package codeAholics;
  */
 public interface IAuthenticationSvc {
 	
+	/** doAuthentication: perform any type of authentication
+	 * @param p1: parameter 1 (email)
+	 * @param p2: parameter 2 (passwd)
+	 * 
+	 * @return true,false
+	 */
 	public boolean doAuthentication(String p1, String p2);
+	
+	/** get an answer from authentication
+	 * @return a String (could be a json token, an OK message
+	 */
 	public String getAnswer();
+	
+	
+	
 }
